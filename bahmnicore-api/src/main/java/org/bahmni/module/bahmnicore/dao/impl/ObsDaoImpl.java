@@ -52,6 +52,23 @@ public class ObsDaoImpl implements ObsDao {
     }
 
     @Override
+    public List<Obs> getFollowupObsByPatient(String patientUuid, List<String> conceptNames) {
+        StringBuilder query = new StringBuilder("select obs from Obs as obs, ConceptName as cn "
+                + " where obs.person.uuid = :patientUuid " + " and cn.concept = obs.concept.conceptId "
+                + " and cn.name in (:conceptNames) " + " and obs.valueDatetime > CURDATE()"
+                + " and cn.locale = :locale " + " and cn.conceptNameType = :conceptNameType "
+                + " and cn.voided = false and obs.voided = false ");
+        Query queryToGetObservations = sessionFactory.getCurrentSession().createQuery(query.toString());
+        queryToGetObservations.setString("patientUuid", patientUuid);
+        queryToGetObservations.setParameterList("conceptNames", conceptNames);
+        queryToGetObservations.setParameter("conceptNameType", ConceptNameType.FULLY_SPECIFIED);
+        queryToGetObservations.setString("locale", Context.getLocale().getLanguage());
+
+        return queryToGetObservations.list();
+    }
+
+
+    @Override
     public List<Concept> getNumericConceptsForPerson(String personUUID) {
         Query query = sessionFactory.getCurrentSession().createQuery(
                 "select concept " +

@@ -17,6 +17,8 @@ public interface ObsDao {
 
     List<Concept> getNumericConceptsForPerson(String personUUID);
 
+    List<Obs> getFollowupObsByPatient(String patientUuid, List<String> conceptNames);
+
     List<Obs> getObsFor(String patientUuid, Concept rootConcept, Concept childConcept, List<Integer> visitIdsFor, Collection<Encounter> encounters, Date startDate, Date endDate);
 
     List<Obs> getLatestObsFor(String patientUuid, String conceptName, Integer limit);

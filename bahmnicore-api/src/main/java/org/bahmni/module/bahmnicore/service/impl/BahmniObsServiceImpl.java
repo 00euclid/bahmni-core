@@ -48,6 +48,16 @@ public class BahmniObsServiceImpl implements BahmniObsService {
     }
 
     @Override
+    public Collection<BahmniObservation> getFollowups(String patientUuid, Collection<Concept> conceptNames) {
+        List<Obs> followupObs = new ArrayList<>();
+        for (Concept concept : conceptNames) {
+            followupObs.addAll(obsDao.getFollowupObsByPatient(patientUuid, Arrays.asList(concept.getName().getName())));
+        }
+        return omrsObsToBahmniObsMapper.map(followupObs, conceptNames);
+    }
+
+
+    @Override
     public List<Obs> getObsForPerson(String identifier) {
         return obsDao.getNumericObsByPerson(identifier);
     }

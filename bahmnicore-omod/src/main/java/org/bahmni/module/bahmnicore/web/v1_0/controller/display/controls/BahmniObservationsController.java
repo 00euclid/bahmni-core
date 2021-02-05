@@ -30,6 +30,7 @@ public class BahmniObservationsController extends BaseRestController {
 
     private static final String LATEST = "latest";
     private static final String INITIAL = "initial";
+    private static final String FOLLOWUPS = "followups";
     private BahmniObsService bahmniObsService;
     private ConceptService conceptService;
     private VisitService visitService;
@@ -59,6 +60,8 @@ public class BahmniObservationsController extends BaseRestController {
             observations = bahmniObsService.getLatest(patientUUID, rootConcepts, numberOfVisits, obsIgnoreList, filterObsWithOrders, null);
         } else if (ObjectUtils.equals(scope, INITIAL)) {
             observations = bahmniObsService.getInitial(patientUUID, rootConcepts, numberOfVisits, obsIgnoreList, filterObsWithOrders, null);
+        } else if (ObjectUtils.equals(scope, FOLLOWUPS)) {
+            observations = bahmniObsService.getFollowups(patientUUID, rootConcepts);
         } else {
             observations = bahmniObsService.observationsFor(patientUUID, rootConcepts, numberOfVisits, obsIgnoreList, filterObsWithOrders, null, null, null);
         }
